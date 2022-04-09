@@ -27,3 +27,10 @@ function test_group(x, y, z, ⊗, eins, inv)
 end
 
 test_multiplicative(x, y, ⊗, f) = @test f(x ⊗ y) ≈ f(x) ⊗ f(y)
+
+complex_to_quat(c::Complex) = Quaternion(c.re, c.im, 0, 0)
+complex_to_quat(a::Real) = Quaternion(a, 0, 0, 0)
+
+complex_to_octo(c::Quaternion) = Octonion(c.s, c.v1, c.v2, c.v3, 0, 0, 0, 0)
+complex_to_octo(c::Complex) = Octonion(c.re, c.im, 0, 0, 0, 0, 0, 0)
+complex_to_octo(a::Real) = Octonion(a, 0, 0, 0, 0, 0, 0, 0)

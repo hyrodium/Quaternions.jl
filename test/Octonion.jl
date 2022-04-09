@@ -32,26 +32,26 @@ using Test
                 @test @inferred(Octonion(T(x))) === Octonion{T}(coef..., isone(abs(x)))
             end
         end
-        @testset "from complex" begin
-            @testset for z in (1 + 0im, -im, 1 + 2im),
-                T in (Float32, Float64, Int, Rational{Int})
+        # @testset "from complex" begin
+        #     @testset for z in (1 + 0im, -im, 1 + 2im),
+        #         T in (Float32, Float64, Int, Rational{Int})
 
-                coef = T.((reim(z)..., zeros(6)...))
-                z2 = Complex{T}(z)
-                norm = isone(abs(z))
-                @test Octonion{T}(z) === Octonion{T}(coef..., norm)
-                @test @inferred(Octonion(z2)) === Octonion{T}(coef..., norm)
-            end
-        end
-        @testset "from quaternion" begin
-            qs = (Quaternion(1, 2, 3, 4), QuaternionF64(0, 1, 0, 0, true))
-            @testset for q in qs, T in (Float32, Float64)
-                coef = T.((q.s, q.v1, q.v2, q.v3, zeros(4)...))
-                q2 = Quaternion{T}(q)
-                @test @inferred(Octonion{T}(q)) === Octonion{T}(coef..., q.norm)
-                @test @inferred(Octonion(q2)) === Octonion{T}(coef..., q.norm)
-            end
-        end
+        #         coef = T.((reim(z)..., zeros(6)...))
+        #         z2 = Complex{T}(z)
+        #         norm = isone(abs(z))
+        #         @test Octonion{T}(z) === Octonion{T}(coef..., norm)
+        #         @test @inferred(Octonion(z2)) === Octonion{T}(coef..., norm)
+        #     end
+        # end
+        # @testset "from quaternion" begin
+        #     qs = (Quaternion(1, 2, 3, 4), QuaternionF64(0, 1, 0, 0, true))
+        #     @testset for q in qs, T in (Float32, Float64)
+        #         coef = T.((q.s, q.v1, q.v2, q.v3, zeros(4)...))
+        #         q2 = Quaternion{T}(q)
+        #         @test @inferred(Octonion{T}(q)) === Octonion{T}(coef..., q.norm)
+        #         @test @inferred(Octonion(q2)) === Octonion{T}(coef..., q.norm)
+        #     end
+        # end
         @testset "from octonion" begin
             os = (
                 Octonion(1, 2, 3, 4, 5, 6, 7, 8), OctonionF64(0, 1, 0, 0, 0, 0, 0, 0, true)
@@ -79,12 +79,12 @@ using Test
 
     @testset "convert" begin
         @test convert(Octonion{Float64}, 1) === Octonion(1.0)
-        @test convert(Octonion{Float64}, Complex(1, 2)) ===
-            Octonion(1.0, 2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
-        @test convert(Octonion{Float64}, Quaternion(1, 2, 3, 4)) ===
-            Octonion(1.0, 2.0, 3.0, 4.0, 0.0, 0.0, 0.0, 0.0)
-        @test convert(Octonion{Float64}, Quaternion(0, 1, 0, 0, true)) ===
-            Octonion(0.0, 1.0, 0.0, 0.0, 0, 0, 0, 0, true)
+        # @test convert(Octonion{Float64}, Complex(1, 2)) ===
+        #     Octonion(1.0, 2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        # @test convert(Octonion{Float64}, Quaternion(1, 2, 3, 4)) ===
+        #     Octonion(1.0, 2.0, 3.0, 4.0, 0.0, 0.0, 0.0, 0.0)
+        # @test convert(Octonion{Float64}, Quaternion(0, 1, 0, 0, true)) ===
+        #     Octonion(0.0, 1.0, 0.0, 0.0, 0, 0, 0, 0, true)
         @test convert(Octonion{Float64}, Octonion(1, 2, 3, 4, 5, 6, 7, 8)) ===
             Octonion(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0)
         @test convert(Octonion{Float64}, Octonion(0, 0, 0, 0, 1, 0, 0, 0, true)) ===
@@ -95,16 +95,16 @@ using Test
         @test promote(Octonion(1.0, 2:8...), 1.0) === (Octonion(1.0, 2:8...), Octonion(1.0))
         @test promote(Octonion(1.0f0, 2:8...), 2.0) ===
             (Octonion(1.0, 2:8...), Octonion(2.0))
-        @test promote(Octonion(1.0f0), 2 + 3im) ===
-            (Octonion(1.0f0), Octonion(2.0f0 + 3.0f0im))
-        @test promote(Octonion(1.0f0), Quaternion(1, 2, 3, 4)) ===
-            (Octonion(1.0f0), Octonion(1.0f0:4.0f0..., fill(0, 4)...))
+        # @test promote(Octonion(1.0f0), 2 + 3im) ===
+        #     (Octonion(1.0f0), Octonion(2.0f0 + 3.0f0im))
+        # @test promote(Octonion(1.0f0), Quaternion(1, 2, 3, 4)) ===
+        #     (Octonion(1.0f0), Octonion(1.0f0:4.0f0..., fill(0, 4)...))
         @test promote(Octonion(1.0f0), Octonion(2.0)) === (Octonion(1.0), Octonion(2.0))
 
         @test Octonion(1) == 1.0
-        @test Octonion(1, 2, fill(0, 6)...) == Complex(1.0, 2.0)
+        # @test Octonion(1, 2, fill(0, 6)...) == Complex(1.0, 2.0)
         @test Octonion(1) == 1.0
-        @test Octonion(1:4..., fill(0, 4)...) == Quaternion(1.0:4.0...)
+        # @test Octonion(1:4..., fill(0, 4)...) == Quaternion(1.0:4.0...)
     end
 
     @testset "shorthands" begin
@@ -208,8 +208,8 @@ using Test
             test_multiplicative(q1, q2, *, norm)
 
             # complex embedding
-            test_multiplicative(c1, c2, *, Octonion)
-            test_multiplicative(c1, c2, +, Octonion)
+            # test_multiplicative(c1, c2, *, Octonion)
+            # test_multiplicative(c1, c2, +, Octonion)
         end
     end
 
@@ -445,8 +445,8 @@ using Test
             for _ in 1:100
                 o1, o2 = randn(OctonionF64, 2)
                 q = randn(QuaternionF64)
-                o = octo(q)
-                @test @inferred(fun(o)) ≈ fun(q)
+                o = complex_to_octo(q)
+                @test @inferred(fun(o)) ≈ complex_to_octo(fun(q))
                 @test o2 * fun(o1) * inv(o2) ≈ fun(o2 * o1 * inv(o2))
             end
         end
@@ -460,8 +460,8 @@ using Test
             for _ in 1:100
                 o1, o2 = randn(OctonionF64, 2)
                 q = randn(QuaternionF64)
-                o = octo(q)
-                @test @inferred(fun(o)) ≈ fun(q)
+                o = complex_to_octo(q)
+                @test @inferred(fun(o)) ≈ complex_to_octo(fun(q))
                 @test o2 * fun(o1) * inv(o2) ≈ fun(o2 * o1 * inv(o2))
             end
         end
